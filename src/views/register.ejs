@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Register</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <h1>Register</h1>
+
+      <% if (errors && errors.length) { %>
+        <ul class="errors">
+          <% errors.forEach(function(e){ %>
+            <li><%= e.msg %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <form method="POST" action="/register">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="no database connection yet" value="<%= (values && values.username) || '' %>" required />
+          <div class="muted">Note: Registration is not available yet.</div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" required />
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" name="confirmPassword" required />
+        </div>
+        <button type="submit">Create account</button>
+      </form>
+
+      <p class="center">Have an account? <a href="/login">Login</a></p>
+    </div>
+  </div>
+</body>
+</html>
