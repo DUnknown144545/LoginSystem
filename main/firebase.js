@@ -5,12 +5,15 @@ import {
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
-// replace stuff here
+// firebase config
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "stuff.firebaseapp.com etc...",
-  projectId: "",
-  appId: "",
+  apiKey: "AIzaSyAjaUwkqA8i6AFvLM8Mx7rYW5LFWsEuk30",
+  authDomain: "authsystemteo.firebaseapp.com",
+  projectId: "authsystemteo",
+  storageBucket: "authsystemteo.firebasestorage.app",
+  messagingSenderId: "1041491628078",
+  appId: "1:1041491628078:web:1814c2b22727fb262a0fbf",
+  measurementId: "G-HYS8YMXDQ6",
 };
 
 const app = initializeApp(firebaseConfig);
