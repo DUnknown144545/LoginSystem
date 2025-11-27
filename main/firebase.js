@@ -3,6 +3,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
 // firebase config
@@ -27,4 +28,9 @@ export function register(email, pass) {
 // login
 export function login(email, pass) {
   return signInWithEmailAndPassword(auth, email, pass);
+}
+
+// logout
+export function logout() {
+  return signOut(auth);
 }

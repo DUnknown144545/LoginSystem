@@ -70,6 +70,20 @@
                     <input id="regPass" type="password" placeholder="Create a strong password">
                 </div>
 
+                <div class="inline-strength">
+                    <div class="inline-meter"><div id="inlineStrengthBar"></div></div>
+                    <div id="inlineStrengthText" class="inline-strength-text">Strength: —</div>
+                </div>
+
+                <div class="password-actions">
+                    <button type="button" id="openPwdModal" class="link-btn">Check password strength</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="regPass2">Confirm Password</label>
+                    <input id="regPass2" type="password" placeholder="Re-enter your password">
+                </div>
+
                 <button id="regBtn">Create Account</button>
 
                 <div class="divider">or continue with</div>
@@ -86,6 +100,21 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="pwdModal" class="modal">
+        <div class="modal-content">
+            <button id="closePwdModal" class="modal-close" aria-label="Close">×</button>
+            <h3>Password strength</h3>
+            <div class="strength-meter"><div id="strengthBar"></div></div>
+            <ul class="criteria">
+                <li id="critLength">At least 8 characters</li>
+                <li id="critUpper">Uppercase letter (A-Z)</li>
+                <li id="critLower">Lowercase letter (a-z)</li>
+                <li id="critNumber">Number (0-9)</li>
+                <li id="critSpecial">Special character (!@#$...)</li>
+            </ul>
         </div>
     </div>
 
