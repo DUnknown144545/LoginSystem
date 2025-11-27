@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Register</title>
-    <link rel="stylesheet" href="../public/styles.css">
+    <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
 
@@ -71,13 +71,18 @@
                 </div>
 
                 <div class="inline-strength">
-                    <div class="inline-meter"><div id="inlineStrengthBar"></div></div>
+                    <div class="inline-meter"><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div></div>
                     <div id="inlineStrengthText" class="inline-strength-text">Strength: —</div>
                 </div>
 
-                <div class="password-actions">
-                    <button type="button" id="openPwdModal" class="link-btn">Check password strength</button>
-                </div>
+                <div class="criteria-title">Password requirements</div>
+                <ul class="criteria">
+                    <li id="critLength">At least 8 characters</li>
+                    <li id="critUpper">Uppercase letter (A-Z)</li>
+                    <li id="critLower">Lowercase letter (a-z)</li>
+                    <li id="critNumber">Number (0-9)</li>
+                    <li id="critSpecial">Special character (!@#$...)</li>
+                </ul>
 
                 <div class="input-group">
                     <label for="regPass2">Confirm Password</label>
@@ -103,22 +108,8 @@
         </div>
     </div>
 
-    <div id="pwdModal" class="modal">
-        <div class="modal-content">
-            <button id="closePwdModal" class="modal-close" aria-label="Close">×</button>
-            <h3>Password strength</h3>
-            <div class="strength-meter"><div id="strengthBar"></div></div>
-            <ul class="criteria">
-                <li id="critLength">At least 8 characters</li>
-                <li id="critUpper">Uppercase letter (A-Z)</li>
-                <li id="critLower">Lowercase letter (a-z)</li>
-                <li id="critNumber">Number (0-9)</li>
-                <li id="critSpecial">Special character (!@#$...)</li>
-            </ul>
-        </div>
-    </div>
+    <script type="module" src="/main/firebase.js"></script>
+    <script type="module" src="/main/script.js"></script>
 
-    <script type="module" src="firebase.js"></script>
-    <script type="module" src="script.js"></script>
 </body>
 </html>
