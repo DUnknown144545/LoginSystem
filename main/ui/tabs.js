@@ -21,3 +21,20 @@ export function initTabs() {
     });
   });
 }
+
+document.querySelectorAll(".switch-form").forEach((link) => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const target = e.target.dataset.target;
+
+    document.querySelectorAll(".form-section").forEach((section) => {
+      section.classList.remove("active");
+    });
+
+    if (target === "login") {
+      document.getElementById("loginForm").classList.add("active");
+    } else {
+      document.getElementById("registerForm").classList.add("active");
+    }
+  });
+});

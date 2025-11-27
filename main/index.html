@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/public/styles.css">
 </head>
 
@@ -61,6 +64,10 @@
                         Google
                     </button>
                 </div>
+
+                <div class="form-footer">
+                    Don't have an account? <a href="#" class="switch-form" data-target="register">Sign up</a>
+                </div>
             </div>
 
             <!-- Register Form -->
@@ -78,7 +85,16 @@
                 <div class="input-group">
                     <label for="regPass">Password</label>
                     <input id="regPass" class="toggleable" type="password" placeholder="Create a strong password">
-                    <button type="button" class="toggle-btn" data-target="regPass">Show</button>
+                    <button type="button" class="toggle-btn" data-target="regPass">
+                        <svg class="eye-open" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" style="display: none;" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
                 </div>
 
                 <div class="inline-strength">
@@ -104,7 +120,16 @@
                 <div class="input-group">
                     <label for="regPass2">Confirm Password</label>
                     <input id="regPass2" class="toggleable" type="password" placeholder="Re-enter your password">
-                    <button type="button" class="toggle-btn" data-target="regPass2">Show</button>
+                    <button type="button" class="toggle-btn" data-target="regPass2">
+                        <svg class="eye-open" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" style="display: none;" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
                 </div>
                 <div id="passMatchText" class="match-text"></div>
 
@@ -130,6 +155,10 @@
                         </svg>
                         Google
                     </button>
+                </div>
+
+                <div class="form-footer">
+                    Already have an account? <a href="#" class="switch-form" data-target="login">Log in</a>
                 </div>
             </div>
         </div>

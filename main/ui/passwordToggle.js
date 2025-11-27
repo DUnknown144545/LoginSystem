@@ -5,9 +5,19 @@ export function initPasswordToggle() {
       const input = document.getElementById(target);
       if (!input) return;
 
+      const eyeOpen = btn.querySelector(".eye-open");
+      const eyeClosed = btn.querySelector(".eye-closed");
+
       const isHidden = input.type === "password";
       input.type = isHidden ? "text" : "password";
-      btn.textContent = isHidden ? "Hide" : "Show";
+
+      if (isHidden) {
+        eyeOpen.style.display = "none";
+        eyeClosed.style.display = "block";
+      } else {
+        eyeOpen.style.display = "block";
+        eyeClosed.style.display = "none";
+      }
     });
   });
 }
