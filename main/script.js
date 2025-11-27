@@ -1,5 +1,6 @@
 import { login, register } from "./firebase.js";
 
+
 function showMessage(id, text, type) {
   const el = document.getElementById(id);
   el.textContent = text;
