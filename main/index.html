@@ -67,7 +67,8 @@
 
                 <div class="input-group">
                     <label for="regPass">Password</label>
-                    <input id="regPass" type="password" placeholder="Create a strong password">
+                    <input id="regPass" class="toggleable" type="password" placeholder="Create a strong password">
+                    <button type="button" class="toggle-btn" data-target="regPass">Show</button>
                 </div>
 
                 <div class="inline-strength">
@@ -86,8 +87,10 @@
 
                 <div class="input-group">
                     <label for="regPass2">Confirm Password</label>
-                    <input id="regPass2" type="password" placeholder="Re-enter your password">
+                    <input id="regPass2" class="toggleable" type="password" placeholder="Re-enter your password">
+                    <button type="button" class="toggle-btn" data-target="regPass2">Show</button>
                 </div>
+                <div id="passMatchText" class="match-text"></div>
 
                 <button id="regBtn">Create Account</button>
 

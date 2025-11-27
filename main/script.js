@@ -147,3 +147,40 @@ const regPassInput = document.getElementById("regPass");
 if (regPassInput) {
   regPassInput.addEventListener("input", updateStrengthUI);
 }
+
+// Confirm password match feedback
+const regPass2Input = document.getElementById("regPass2");
+const passMatchText = document.getElementById("passMatchText");
+
+function updateMatchUI() {
+  const p1 = (document.getElementById("regPass")?.value || "").trim();
+  const p2 = (document.getElementById("regPass2")?.value || "").trim();
+  if (!passMatchText) return;
+  passMatchText.classList.remove("ok", "bad");
+  if (!p2) {
+    passMatchText.textContent = "";
+    return;
+  }
+  if (p1 === p2) {
+    passMatchText.textContent = "Passwords match";
+    passMatchText.classList.add("ok");
+  } else {
+    passMatchText.textContent = "Passwords do not match";
+    passMatchText.classList.add("bad");
+  }
+}
+
+if (regPassInput) regPassInput.addEventListener("input", updateMatchUI);
+if (regPass2Input) regPass2Input.addEventListener("input", updateMatchUI);
+
+// Toggle show/hide for password inputs
+document.querySelectorAll(".toggle-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-target");
+    const input = target ? document.getElementById(target) : null;
+    if (!input) return;
+    const toText = input.type === "password";
+    input.type = toText ? "text" : "password";
+    btn.textContent = toText ? "Hide" : "Show";
+  });
+});
