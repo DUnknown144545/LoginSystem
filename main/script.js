@@ -42,7 +42,7 @@ document.getElementById("loginBtn").addEventListener("click", () => {
   login(email, pass)
     .then(() => {
       showMessage("loginMessage", "Login successful! Redirecting...", "success");
-      setTimeout(() => (window.location.href = "dashboard.html"), 1200);
+      setTimeout(() => (window.location.href = "/main/dashboard.html"), 1200);
     })
     .catch(err => {
       showMessage("loginMessage", err.message, "error");
@@ -73,20 +73,16 @@ document.getElementById("regBtn").addEventListener("click", () => {
   register(email, pass)
     .then(() => {
       showMessage("registerMessage", "Registration successful! Redirecting...", "success");
-      setTimeout(() => (window.location.href = "dashboard.html"), 1200);
+      setTimeout(() => (window.location.href = "/main/dashboard.html"), 1200);
     })
     .catch(err => {
       showMessage("registerMessage", err.message, "error");
     });
 });
 
-// Password strength modal logic
-const pwdModal = document.getElementById("pwdModal");
-const openPwdModal = document.getElementById("openPwdModal");
-const closePwdModal = document.getElementById("closePwdModal");
-const strengthBar = document.getElementById("strengthBar");
-const inlineStrengthBar = document.getElementById("inlineStrengthBar");
+// Password strength (inline)
 const inlineStrengthText = document.getElementById("inlineStrengthText");
+const segmentEls = document.querySelectorAll('.inline-meter .seg');
 const critLength = document.getElementById("critLength");
 const critUpper = document.getElementById("critUpper");
 const critLower = document.getElementById("critLower");
@@ -121,43 +117,30 @@ function updateStrengthUI() {
   else if (score === 3) { color = "#f59e0b"; label = "Medium"; }
   else if (score === 2) { color = "#f97316"; label = "Fair"; }
 
-  if (strengthBar) {
-    strengthBar.style.width = pct + "%";
-    strengthBar.style.background = color;
-  }
-  if (inlineStrengthBar) {
-    inlineStrengthBar.style.width = pct + "%";
-    inlineStrengthBar.style.background = color;
+  // Update 5-segment meter
+  if (segmentEls && segmentEls.length) {
+    const active = Math.min(5, Math.max(0, score));
+    segmentEls.forEach((seg, idx) => {
+      seg.style.background = idx < active ? color : "#e2e8f0";
+    });
   }
   if (inlineStrengthText) {
     inlineStrengthText.textContent = `Strength: ${pwd ? label : "—"}`;
     inlineStrengthText.style.color = pwd ? color : "#718096";
+    const bg = !pwd ? "#edf2f7" : (
+      score >= 5 ? "rgba(16,185,129,0.15)" :
+      score === 4 ? "rgba(59,130,246,0.15)" :
+      score === 3 ? "rgba(245,158,11,0.15)" :
+      score === 2 ? "rgba(249,115,22,0.15)" :
+      "rgba(239,68,68,0.15)"
+    );
+    inlineStrengthText.style.backgroundColor = bg;
   }
   setCrit(critLength, checks.length);
   setCrit(critUpper, checks.upper);
   setCrit(critLower, checks.lower);
   setCrit(critNumber, checks.number);
   setCrit(critSpecial, checks.special);
-}
-
-if (openPwdModal && pwdModal) {
-  openPwdModal.addEventListener("click", () => {
-    pwdModal.classList.add("show");
-    updateStrengthUI();
-  });
-}
-
-if (closePwdModal && pwdModal) {
-  closePwdModal.addEventListener("click", () => pwdModal.classList.remove("show"));
-}
-
-if (pwdModal) {
-  pwdModal.addEventListener("click", (e) => {
-    if (e.target === pwdModal) pwdModal.classList.remove("show");
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") pwdModal.classList.remove("show");
-  });
 }
 
 const regPassInput = document.getElementById("regPass");
