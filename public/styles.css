@@ -359,17 +359,11 @@
         }
 
         .criteria li {
-            position: relative;
-            padding-left: 20px;
+            padding-left: 0;
         }
 
         .criteria li::before {
-            content: '✕';
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #ef4444;
-            font-weight: 700;
+            content: none;
         }
 
         .criteria li.ok {
@@ -377,8 +371,7 @@
             font-weight: 600;
         }
         .criteria li.ok::before {
-            content: '✓';
-            color: #10b981;
+            content: none;
         }
 
         .inline-strength {
