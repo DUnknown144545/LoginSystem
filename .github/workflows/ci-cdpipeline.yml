@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+# Needed permissions for Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 env:
   NODE_VERSION: '18.x'
 
@@ -14,7 +20,7 @@ jobs:
   lint:
     name: Lint Code
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,7 +46,7 @@ jobs:
   security:
     name: Security Scan
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,8 +72,8 @@ jobs:
   build:
     name: Build Application
     runs-on: ubuntu-latest
-    needs: [lint]
-    
+    needs: [lint, security]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -78,107 +84,46 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install dependencies  
+      - name: Install dependencies
         run: npm ci
 
       - name: Build application
         run: npm run build
-        # --- FIX 1: Restoring the necessary environment variables for the build ---
         env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          # keep any Vite envs you still need for building; remove if not used
           VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
           VITE_EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
           VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
-        # --------------------------------------------------------------------------
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        # This uploads the built `dist/` to the Pages artifact store for deployment
+        uses: actions/upload-pages-artifact@v1
         with:
-          name: build-files
-          path: dist/
-          retention-days: 7
+          path: ./dist
 
-  # Job 4: Deploy to Firebase Hosting (Production)
-  deploy-production:
-    name: Deploy to Production
-    runs-on: ubuntu-latest
-    needs: [build, security]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment:
-      name: production
-      url: https://authsystemteo.web.app
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-files
-          path: dist/
-
-      - name: Deploy to Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          # --- FIX 2: Added the required service account secret for deployment ---
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          # ----------------------------------------------------------------------
-          channelId: live
-          projectId: authsystemteo
-
-      - name: Send deployment notification
-        if: success()
-        run: |
-          echo "✅ Production deployment successful!"
-          echo "🚀 Site URL: https://authsystemteo.web.app"
-
-  # Job 5: Deploy to Firebase Hosting (Preview)
-  deploy-preview:
-    name: Deploy Preview
+  # Job 4: Deploy to GitHub Pages (Production)
+  deploy-pages:
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     needs: [build]
-    if: github.event_name == 'pull_request'
-    
+    # Only deploy on direct pushes to main
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-files
-          path: dist/
-
-      - name: Deploy to Firebase Preview
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          # --- FIX 2: Added the required service account secret for deployment ---
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          # ----------------------------------------------------------------------
-          projectId: authsystemteo
-          expires: 7d
-
-  # Job 6: Notify on failure
+  # Job 5: Notify on failure
   notify-failure:
     name: Notify on Failure
     runs-on: ubuntu-latest
-    needs: [lint, security, build, deploy-production]
-    if: failure()
-    
+    # don't require deploy-pages (it can be skipped on non-main runs)
+    needs: [lint, security, build]
+    if: ${{ failure() }}
+
     steps:
       - name: Send failure notification
         run: |
           echo "❌ Pipeline failed! Check the logs for details."
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
-          # --- FIX 3: Corrected a typo in the branch echo command ---
-          echo "Commit: ${{ github.sha }}"
-        # -----------------------------------------------------------
