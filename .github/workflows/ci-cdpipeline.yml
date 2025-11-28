@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+# Minimal permissions required to deploy to Pages
 permissions:
   contents: read
   pages: write
@@ -15,81 +16,101 @@ env:
   NODE_VERSION: '18.x'
 
 jobs:
+  # Job 1: Linting and Code Quality (non-blocking)
   lint:
     name: Lint Code
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-        continue-on-error: true
-      - run: npm run format:check
-        continue-on-error: true
 
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then npm ci; else echo "no package.json, skipping npm ci"; fi
+
+      - name: Run ESLint (if present)
+        run: |
+          if grep -q "\"lint\"" package.json; then npm run lint || true; else echo "no lint script, skipping"; fi
+
+      - name: Run Prettier check (if present)
+        run: |
+          if grep -q "\"format:check\"" package.json; then npm run format:check || true; else echo "no format:check script, skipping"; fi
+
+  # Job 2: Security Scanning (non-blocking)
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - run: npm ci
-      - run: npm audit --audit-level=moderate
-        continue-on-error: true
-      - uses: trufflesecurity/trufflehog@main
+
+      - name: Install dependencies (if package.json exists)
+        run: |
+          if [ -f package.json ]; then npm ci; else echo "no package.json, skipping npm ci"; fi
+
+      - name: Run npm audit (if deps installed)
+        run: |
+          if [ -f package-lock.json ] || [ -f package.json ]; then npm audit --audit-level=moderate || true; else echo "no npm deps, skipping audit"; fi
+
+      - name: Check for secrets with trufflehog
+        uses: trufflesecurity/trufflehog@main
         with:
           extra_args: --only-verified
 
-  build:
-    name: Build Application
+  # Job 3: Deploy Static Site to GitHub Pages (publishes main/ folder)
+  deploy-pages:
+    name: Deploy Static Site (gh-pages)
     runs-on: ubuntu-latest
     needs: [lint, security]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - name: Build application
-        run: npm run build
-      - name: Show built files (debug)
-        run: |
-          echo "dist size and top-level files:"
-          du -sh dist || true
-          ls -la dist || true
-
-  deploy-pages:
-    name: Deploy to GitHub Pages (gh-pages branch)
-    runs-on: ubuntu-latest
-    needs: [build]
+    # only publish on direct pushes to main
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Show top-level files (debug)
+        run: |
+          echo "Repository top-level:"
+          ls -la
+
+      - name: Show site folder contents (debug)
+        run: |
+          if [ -d main ]; then echo "main folder contents:"; ls -la main || true; else echo "main folder not found"; fi
+
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # folder to push (your built static site)
-          folder: ./dist
-          # branch where static site will be deployed
+          folder: main          # <--- publish this folder (where your index.html is)
           branch: gh-pages
-          # token (the action uses the token to push)
-          token: ${{ secrets.GITHUB_TOKEN }}
           clean: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
+  # Job 4: Notify on failure
   notify-failure:
     name: Notify on Failure
     runs-on: ubuntu-latest
-    needs: [lint, security, build]
+    # depend only on lint and security so deploy skipping doesn't block notifier
+    needs: [lint, security]
     if: ${{ failure() }}
+
     steps:
-      - run: |
-          echo "❌ Pipeline failed!"
+      - name: Print failure summary
+        run: |
+          echo "❌ Pipeline failed! Check job logs for details."
+          echo "Repository: ${{ github.repository }}"
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
