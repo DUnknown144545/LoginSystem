@@ -1,442 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-            background: #0f172a;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: #0f172a;
+    }
 
-        /* GIF Splash Screen */
-        .splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background-image: url('gifs/hot-guy.gif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 1;
-            transition: opacity 2s ease;
-        }
+    /* GIF Splash Screen */
+    .splash-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 9999;
+      background-image: url('gifs/hot-guy.gif'); /* fixed path */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 1;
+      transition: opacity 2s ease;
+    }
 
-        .splash-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+    .splash-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        /* Main Dashboard - Initially Hidden */
-        .dashboard {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            min-height: 100vh;
-        }
+    /* Main Dashboard - Initially Hidden */
+    .dashboard { opacity: 0; transition: opacity 0.5s ease; min-height: 100vh; }
+    .dashboard.visible { opacity: 1; }
 
-        .dashboard.visible {
-            opacity: 1;
-        }
+    /* Navbar */
+    .navbar {
+      background: rgba(15,23,42,0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
 
-        /* Navbar */
-        .navbar {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .user-email {
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+      margin-left: 10px;
+    }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
 
-        .logout-btn {
-            padding: 10px 24px;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .logout-btn {
+      padding: 10px 24px;
+      background: linear-gradient(135deg,#ef4444 0%,#dc2626 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-        }
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239,68,68,0.4);
+    }
 
-        /* Container */
-        .container {
-            padding: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+    /* Container */
+    .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
+    .welcome-section { margin-bottom: 40px; }
+    .welcome-title { font-size: 32px; color: white; margin-bottom: 10px; }
+    .welcome-subtitle { color: rgba(255,255,255,0.7); font-size: 16px; }
 
-        .welcome-section {
-            margin-bottom: 40px;
-        }
+    /* Team Grid */
+    .team-section { margin-bottom: 40px; }
+    .section-title { color: white; font-size: 24px; margin-bottom: 25px; font-weight: 600; }
+    .team-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:25px; }
 
-        .welcome-title {
-            font-size: 32px;
-            color: white;
-            margin-bottom: 10px;
-        }
+    .team-card {
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.1) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .welcome-subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 16px;
-        }
+    .team-card::before {
+      content:''; position:absolute; top:0; left:0; width:100%; height:4px;
+      background: linear-gradient(90deg,#6366f1,#8b5cf6,#ec4899);
+    }
 
-        /* Team Grid */
-        .team-section {
-            margin-bottom: 40px;
-        }
+    .team-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(99,102,241,0.2); border-color: rgba(255,255,255,0.2); }
 
-        .section-title {
-            color: white;
-            font-size: 24px;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
+    .profile-section { display:flex; align-items:center; gap:20px; margin-bottom:20px; }
+    .profile-img { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#667eea 0%, #764ba2 100%); display:flex; align-items:center; justify-content:center; color:white; font-size:32px; font-weight:bold; border:3px solid rgba(255,255,255,0.2); overflow:hidden; }
+    .profile-img img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .profile-info h3 { color:white; font-size:22px; margin-bottom:5px; }
+    .profile-role { color: rgba(255,255,255,0.6); font-size:14px; font-weight:500; }
+    .info-grid { display:grid; gap:12px; }
+    .info-item { display:flex; align-items:center; gap:10px; color: rgba(255,255,255,0.8); font-size:14px; }
+    .info-icon { width:32px; height:32px; background: rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+    .info-label { font-weight:600; color: rgba(255,255,255,0.9); }
 
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
+    /* Stats Section */
+    .stats-section { margin-top:40px; }
+    .stats-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:20px; }
+    .stat-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius:15px; padding:25px; transition: all 0.3s ease; }
+    .stat-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
+    .stat-value { font-size:32px; font-weight:bold; color:white; margin-bottom:8px; }
+    .stat-label { color: rgba(255,255,255,0.6); font-size:14px; }
 
-        .team-card {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .team-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .profile-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 32px;
-            font-weight: bold;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-        }
-
-        .profile-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .profile-info h3 {
-            color: white;
-            font-size: 22px;
-            margin-bottom: 5px;
-        }
-
-        .profile-role {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .info-grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-        }
-
-        .info-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Stats Section */
-        .stats-section {
-            margin-top: 40px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 15px 20px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-
-            .team-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .welcome-title {
-                font-size: 24px;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .navbar { padding: 15px 20px; }
+      .container { padding: 20px; }
+      .team-grid { grid-template-columns: 1fr; }
+      .welcome-title { font-size: 24px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- GIF Splash Screen -->
-    <div class="splash-screen" id="splashScreen"></div>
+  <!-- GIF Splash Screen -->
+  <div class="splash-screen" id="splashScreen"></div>
 
-    <!-- Main Dashboard -->
-    <div class="dashboard" id="dashboard">
-        <nav class="navbar">
-            <div class="logo">
-                <span>🚀</span>
-                Team Dashboard
+  <!-- Main Dashboard -->
+  <div class="dashboard" id="dashboard">
+    <nav class="navbar">
+      <div class="logo">
+        <span>🚀</span>
+        <div>
+          <div>Team Dashboard</div>
+          <div id="userEmail" class="user-email" style="font-size:13px; font-weight:500; color:rgba(255,255,255,0.85);"></div>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="welcome-section">
+        <h1 class="welcome-title">Welcome to Our Dashboard! 👋</h1>
+        <p class="welcome-subtitle">Meet our amazing team members</p>
+      </div>
+
+      <div class="team-section">
+        <h2 class="section-title">Team Members</h2>
+        <div class="team-grid">
+          <!-- Team Member 1 -->
+          <div class="team-card">
+            <div class="profile-section">
+              <div class="profile-img"><img src="pics/download.jpg" alt="Lord Kiann Macaraya"></div>
+              <div class="profile-info"><h3>Lord Kiann Macaraya</h3><p class="profile-role">Full Stack Developer</p></div>
             </div>
-            <div class="nav-right">
-                <button class="logout-btn" id="logoutBtn">Logout</button>
+            <div class="info-grid">
+              <div class="info-item"><div class="info-icon">📧</div><span><span class="info-label">Email:</span> john.doe@example.com</span></div>
+              <div class="info-item"><div class="info-icon">📱</div><span><span class="info-label">Phone:</span> +1 (555) 123-4567</span></div>
+              <div class="info-item"><div class="info-icon">📍</div><span><span class="info-label">Location:</span> New York, USA</span></div>
+              <div class="info-item"><div class="info-icon">🎯</div><span><span class="info-label">Projects:</span> 24 Completed</span></div>
             </div>
-        </nav>
+          </div>
 
-        <div class="container">
-            <div class="welcome-section">
-                <h1 class="welcome-title">Welcome to Our Dashboard! 👋</h1>
-                <p class="welcome-subtitle">Meet our amazing team members</p>
+          <!-- Team Member 2 -->
+          <div class="team-card">
+            <div class="profile-section">
+              <div class="profile-img"><img src="pics/download (1).jpg" alt="Adam Wywiol"></div>
+              <div class="profile-info"><h3>Adam Wywiol</h3><p class="profile-role">UI/UX Designer</p></div>
             </div>
-
-            <div class="team-section">
-                <h2 class="section-title">Team Members</h2>
-                <div class="team-grid">
-                    <!-- Team Member 1 -->
-                    <div class="team-card">
-                        <div class="profile-section">
-                            <div class="profile-img">
-                                <img src="pics/download.jpg" alt="Lord Kiann Macaraya">
-                            </div>
-                            <div class="profile-info">
-                                <h3>Lord Kiann Macaraya</h3>
-                                <p class="profile-role">Full Stack Developer</p>
-                            </div>
-                        </div>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-icon">📧</div>
-                                <span><span class="info-label">Email:</span> john.doe@example.com</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">📱</div>
-                                <span><span class="info-label">Phone:</span> +1 (555) 123-4567</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">📍</div>
-                                <span><span class="info-label">Location:</span> New York, USA</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">🎯</div>
-                                <span><span class="info-label">Projects:</span> 24 Completed</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Team Member 2 -->
-                    <div class="team-card">
-                        <div class="profile-section">
-                            <div class="profile-img">
-                                <img src="pics/download (1).jpg" alt="Adam Wywiol">
-                            </div>
-                            <div class="profile-info">
-                                <h3>Adam Wywiol</h3>
-                                <p class="profile-role">UI/UX Designer</p>
-                            </div>
-                        </div>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-icon">📧</div>
-                                <span><span class="info-label">Email:</span> alice.smith@example.com</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">📱</div>
-                                <span><span class="info-label">Phone:</span> +1 (555) 234-5678</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">📍</div>
-                                <span><span class="info-label">Location:</span> London, UK</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">🎯</div>
-                                <span><span class="info-label">Projects:</span> 31 Completed</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Team Member 3 -->
-                    <div class="team-card">
-                        <div class="profile-section">
-                            <div class="profile-img">
-                                <img src="pics/download (2).jpg" alt="Dan Guilliam Montenegro">
-                            </div>
-                            <div class="profile-info">
-                                <h3>Dan Guilliam Montenegro</h3>
-                                <p class="profile-role">Backend Engineer</p>
-                            </div>
-                        </div>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-icon">📧</div>
-                                <span><span class="info-label">Email:</span> dangmontenegro@gmail.com</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">📱</div>
-                                <span><span class="info-label">Phone:</span> +63 9498103923</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">📍</div>
-                                <span><span class="info-label">Location:</span> Tuba, Dalaguete, Cebu</span>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">🎯</div>
-                                <span><span class="info-label">Projects:</span> 6 Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="info-grid">
+              <div class="info-item"><div class="info-icon">📧</div><span><span class="info-label">Email:</span> alice.smith@example.com</span></div>
+              <div class="info-item"><div class="info-icon">📱</div><span><span class="info-label">Phone:</span> +1 (555) 234-5678</span></div>
+              <div class="info-item"><div class="info-icon">📍</div><span><span class="info-label">Location:</span> London, UK</span></div>
+              <div class="info-item"><div class="info-icon">🎯</div><span><span class="info-label">Projects:</span> 31 Completed</span></div>
             </div>
+          </div>
 
-            
-    <!-- Splash Screen Script (must run immediately) -->
-    <script>
-        // Show splash screen for 0.5 seconds, then show dashboard
-        window.addEventListener('DOMContentLoaded', () => {
-            const splashScreen = document.getElementById('splashScreen');
-            const dashboard = document.getElementById('dashboard');
+          <!-- Team Member 3 -->
+          <div class="team-card">
+            <div class="profile-section">
+              <div class="profile-img"><img src="pics/download (2).jpg" alt="Dan Guilliam Montenegro"></div>
+              <div class="profile-info"><h3>Dan Guilliam Montenegro</h3><p class="profile-role">Backend Engineer</p></div>
+            </div>
+            <div class="info-grid">
+              <div class="info-item"><div class="info-icon">📧</div><span><span class="info-label">Email:</span> dangmontenegro@gmail.com</span></div>
+              <div class="info-item"><div class="info-icon">📱</div><span><span class="info-label">Phone:</span> +63 9498103923</span></div>
+              <div class="info-item"><div class="info-icon">📍</div><span><span class="info-label">Location:</span> Tuba, Dalaguete, Cebu</span></div>
+              <div class="info-item"><div class="info-icon">🎯</div><span><span class="info-label">Projects:</span> 6 Completed</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- (you can add more sections / charts here) -->
+    </div>
+  </div>
 
-            setTimeout(() => {
-                splashScreen.classList.add('hidden');
-                dashboard.classList.add('visible');
-            }, 500); // 0.5 seconds
-        });
-        const btn = document.getElementById("logoutBtn");
+  <!-- Splash Screen Script (must run immediately) -->
+  <script>
+    // Show splash screen for 0.5 seconds, then show dashboard
+    window.addEventListener('DOMContentLoaded', () => {
+      const splashScreen = document.getElementById('splashScreen');
+      const dashboard = document.getElementById('dashboard');
 
-        if (btn) {
-          btn.addEventListener("click", async () => {
-            btn.disabled = true;
-            try {
-              await logout();
-              window.location.href = "index.html";
-            } catch (err) {
-              alert(err?.message || "Failed to logout");
-              btn.disabled = false;
-            }
-          });
-}
-    </script>
+      setTimeout(() => {
+        splashScreen.classList.add('hidden');
+        dashboard.classList.add('visible');
+      }, 500); // 0.5 seconds
+    });
+  </script>
 
-    <script type="module" src="firebase.js"></script>
-    <script type="module" src="dashboard.js"></script>
+  <!-- Inline module: auth guard, show user info, logout button -->
+  <script type="module">
+    // Import auth and logout from your firebase module
+    import { auth, logout } from './main/firebase.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userEmailEl = document.getElementById('userEmail');
+
+    // Auth guard: redirect to index.html if not signed in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in: show email
+        const email = user.email || '';
+        userEmailEl.textContent = email;
+      } else {
+        // Not signed in -> force redirect to login page
+        // Use relative path (index.html at repo root)
+        window.location.replace('index.html');
+      }
+    });
+
+    // Logout handler
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        logoutBtn.disabled = true;
+        logoutBtn.textContent = 'Signing out...';
+        try {
+          await logout();
+          // After logout redirect to login
+          window.location.href = 'index.html';
+        } catch (err) {
+          console.error('Logout error:', err);
+          alert(err?.message || 'Failed to logout. Please try again.');
+          logoutBtn.disabled = false;
+          logoutBtn.textContent = 'Logout';
+        }
+      });
+    }
+  </script>
 </body>
 </html>
