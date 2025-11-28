@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 8px 8px 0 #333;
+    border: 3px solid #333;
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+}
+
+.tabs {
+    display: none;
+}
+
+.form-container {
+    padding: 40px;
+}
+
+.form-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2 {
+    color: #2d3748;
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.subtitle {
+    color: #718096;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #333;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+}
+
+input.toggleable {
+    padding-right: 45px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #333;
+    box-shadow: 4px 4px 0 rgba(102, 126, 234, 0.3);
+    transform: translate(-2px, -2px);
+}
+
+input::placeholder {
+    color: #a0aec0;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #667eea;
+    color: white;
+    border: 3px solid #333;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    box-shadow: 4px 4px 0 #333;
+    font-family: 'Nunito', sans-serif;
+}
+
+button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #333;
+}
+
+button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #333;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: #a0aec0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: #333;
+}
+
+.divider::before {
+    margin-right: 10px;
+}
+
+.divider::after {
+    margin-left: 10px;
+}
+
+.social-login {
+    display: flex;
+    gap: 10px;
+}
+
+.social-btn {
+    flex: 1;
+    margin-top: 0;
+    padding: 12px;
+    border: 2px solid #333;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #4a5568;
+    box-shadow: 3px 3px 0 #333;
+}
+
+.social-btn:hover {
+    background: #f8f9fa;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #333;
+}
+
+.social-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 #333;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    display: none;
+    border: 2px solid #333;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.message.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.password-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -8px;
+    margin-bottom: 10px;
+}
+
+.link-btn {
+    width: auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #667eea;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.link-btn:hover {
+    color: #764ba2;
+    box-shadow: none;
+    transform: none;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 1000;
+}
+
+.modal.show { display: flex; }
+
+.modal-content {
+    background: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 360px;
+    padding: 16px 16px 12px;
+    box-shadow: 6px 6px 0 #333;
+    border: 3px solid #333;
+    position: relative;
+}
+
+.modal-content h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #2d3748;
+    font-weight: 800;
+}
+
+.modal-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: auto;
+    background: transparent;
+    color: #4a5568;
+    font-size: 20px;
+    line-height: 1;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.strength-meter {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    border: 2px solid #333;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.strength-meter #strengthBar {
+    height: 100%;
+    width: 0%;
+    background: #ef4444;
+    transition: width 0.25s ease, background 0.25s ease;
+}
+
+.criteria {
+    list-style: none;
+    padding: 10px 12px;
+    margin: 8px 0 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #718096;
+    background: #f8fafc;
+    border: 2px solid #333;
+    border-radius: 4px;
+}
+
+.criteria li {
+    padding-left: 0;
+}
+
+.criteria li::before {
+    content: none;
+}
+
+.criteria li.ok {
+    color: #10b981;
+    font-weight: 700;
+}
+.criteria li.ok::before {
+    content: none;
+}
+
+.inline-strength {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    margin-top: -6px;
+    margin-bottom: 8px;
+}
+
+.toggle-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    background: transparent;
+    border: none;
+    color: #6c757d;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    line-height: 1;
+    width: auto;
+    margin: 0;
+    box-shadow: none;
+}
+
+input.toggleable:focus + .toggle-btn {
+    transform: translate(-2px,  -2px);
+}
+
+.toggle-btn:hover {
+    color: #667eea;
+    transform: none;
+    box-shadow: none;
+}
+
+.toggle-btn:active {
+    transform: none;
+    box-shadow: none;
+}
+
+.toggle-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.match-text {
+    font-size: 12px;
+    margin-top: -6px;
+    margin-bottom: 8px;
+    color: #718096;
+    font-weight: 700;
+}
+
+.match-text.ok { color: #10b981; }
+.match-text.bad { color: #ef4444; }
+
+.inline-meter {
+    height: 8px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    align-items: center;
+}
+
+.inline-meter .seg {
+    height: 100%;
+    background: #e2e8f0;
+    border-radius: 4px;
+    border: 1px solid #333;
+    transition: background 0.25s ease;
+}
+
+.inline-meter #inlineStrengthBar {
+    height: 100%;
+    width: 0%;
+    background: #ef4444;
+    transition: width 0.25s ease, background 0.25s ease;
+}
+
+.inline-strength-text {
+    font-size: 12px;
+    color: #718096;
+    min-width: 110px;
+    text-align: right;
+    background: #edf2f7;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 2px solid #333;
+    font-weight: 700;
+}
+
+.criteria-title {
+    font-size: 12px;
+    color: #4a5568;
+    margin: 6px 0 6px;
+    font-weight: 700;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #e2e8f0;
+    font-size: 14px;
+    color: #718096;
+}
+
+.form-footer a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 4px;
+    transition: color 0.2s ease;
+}
+
+.form-footer a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+.login-timer {
+    display: none;
+    padding: 16px;
+    background: #fff3cd;
+    border: 2px solid #333;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.login-timer.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+.login-timer .timer-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.login-timer .timer-text {
+    font-size: 14px;
+    color: #856404;
+    margin-bottom: 4px;
+}
+
+.login-timer .timer-countdown {
+    font-size: 24px;
+    color: #333;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+/* ============================================
+   OTP MODAL STYLES - Add to end of styles.css
+   ============================================ */
+
+.otp-modal-content {
+    max-width: 480px;
+    padding: 32px 24px;
+}
+
+.otp-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.otp-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.otp-modal-content h3 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    color: #2d3748;
+    font-weight: 800;
+}
+
+.otp-subtitle {
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.5;
+}
+
+.otp-subtitle strong {
+    color: #667eea;
+    font-weight: 700;
+}
+
+.otp-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.otp-input {
+    width: 56px;
+    height: 56px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    border: 3px solid #333;
+    border-radius: 8px;
+    background: white;
+    color: #2d3748;
+    transition: all 0.2s ease;
+    font-family: 'Nunito', sans-serif;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    transform: scale(1.05);
+}
+
+.otp-input.filled {
+    background: #f0f4ff;
+    border-color: #667eea;
+}
+
+.otp-input.error {
+    border-color: #ef4444;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.otp-timer {
+    text-align: center;
+    margin: 20px 0;
+    padding: 12px;
+    background: #fff3cd;
+    border: 2px solid #333;
+    border-radius: 4px;
+}
+
+.otp-timer span {
+    font-size: 14px;
+    color: #856404;
+    font-weight: 700;
+}
+
+.otp-timer strong {
+    color: #333;
+    font-size: 16px;
+}
+
+.otp-timer.expired {
+    background: #f8d7da;
+}
+
+.otp-timer.expired span {
+    color: #721c24;
+}
+
+.otp-verify-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 16px;
+    background: #667eea;
+    color: white;
+    border: 3px solid #333;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 4px 4px 0 #333;
+    font-family: 'Nunito', sans-serif;
+}
+
+.otp-verify-btn:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #333;
+}
+
+.otp-verify-btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #333;
+}
+
+.otp-verify-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.otp-resend {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #e2e8f0;
+    font-size: 14px;
+    color: #718096;
+}
+
+.resend-link {
+    margin-left: 8px;
+    font-size: 14px;
+    padding: 0;
+    margin-top: 0;
+}
+
+.resend-cooldown {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+.otp-loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .otp-input-container {
+        gap: 8px;
+    }
+    
+    .otp-input {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+    
+    .otp-modal-content {
+        padding: 24px 16px;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" data-tab="login">Login</button>
+            <button class="tab" data-tab="register">Register</button>
+        </div>
+
+        <div class="form-container">
+            <!-- Login Form -->
+            <div id="loginForm" class="form-section active">
+                <h2>Welcome back</h2>
+                <p class="subtitle">Enter your credentials to access your account</p>
+
+                <div id="loginMessage" class="message"></div>
+                <div id="loginTimer" class="login-timer"></div>
+
+                <div class="input-group">
+                    <label for="loginEmail">Email</label>
+                    <input id="loginEmail" type="email" placeholder="you@example.com">
+                </div>
+
+                <div class="input-group">
+                    <label for="loginPass">Password</label>
+                    <input id="loginPass" type="password" placeholder="Enter your password">
+                </div>
+
+                
+
+                <button id="loginBtn">Sign In</button>
+
+                <div class="form-footer">
+                    Don't have an account? <a href="#" class="switch-form" data-target="register">Sign up</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="form-section">
+                <h2>Create account</h2>
+                <p class="subtitle">Sign up to get started with your account</p>
+
+                <div id="registerMessage" class="message"></div>
+
+                <div class="input-group">
+                    <label for="regEmail">Email</label>
+                    <input id="regEmail" type="email" placeholder="you@example.com">
+                </div>
+
+                <div class="input-group">
+                    <label for="regPass">Password</label>
+                    <input id="regPass" class="toggleable" type="password" placeholder="Create a strong password">
+                    <button type="button" class="toggle-btn" data-target="regPass">
+                        <svg class="eye-open" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" style="display: none;" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="inline-strength">
+                    <div class="inline-meter">
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                    </div>
+                    <div id="inlineStrengthText" class="inline-strength-text">Strength: —</div>
+                </div>
+
+                <div class="criteria-title">Password requirements</div>
+                <ul class="criteria">
+                    <li id="critLength">At least 8 characters</li>
+                    <li id="critUpper">Uppercase letter (A-Z)</li>
+                    <li id="critLower">Lowercase letter (a-z)</li>
+                    <li id="critNumber">Number (0-9)</li>
+                    <li id="critSpecial">Special character (!@#$...)</li>
+                </ul>
+
+                <div class="input-group">
+                    <label for="regPass2">Confirm Password</label>
+                    <input id="regPass2" class="toggleable" type="password" placeholder="Re-enter your password">
+                    <button type="button" class="toggle-btn" data-target="regPass2">
+                        <svg class="eye-open" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" style="display: none;" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div id="passMatchText" class="match-text"></div>
+
+                <button id="regBtn">Create Account</button>
+
+                <div class="form-footer">
+                    Already have an account? <a href="#" class="switch-form" data-target="login">Log in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div id="otpModal" class="modal">
+        <div class="modal-content otp-modal-content">
+            <button class="modal-close" id="otpModalClose">&times;</button>
+            
+            <div class="otp-header">
+                <div class="otp-icon">📧</div>
+                <h3>Verify Your Email</h3>
+                <p class="otp-subtitle">We've sent a 6-digit code to <strong id="otpEmailDisplay"></strong></p>
+            </div>
+
+            <div id="otpMessage" class="message"></div>
+
+            <div class="otp-input-container">
+                <input type="text" maxlength="1" class="otp-input" id="otp1" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp2" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp3" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp4" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp5" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp6" autocomplete="off">
+            </div>
+
+            <div class="otp-timer">
+                <span id="otpTimerText">Code expires in: <strong id="otpCountdown">10:00</strong></span>
+            </div>
+
+            <button id="verifyOtpBtn" class="otp-verify-btn">Verify Code</button>
+
+            <div class="otp-resend">
+                <span>Didn't receive the code?</span>
+                <button id="resendOtpBtn" class="link-btn resend-link">Resend Code</button>
+                <span id="resendCooldown" class="resend-cooldown"></span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main/firebase.js"></script>
+    <script type="module" src="main/script.js"></script>
+</body>
+
+</html>
