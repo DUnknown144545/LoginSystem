@@ -26,12 +26,12 @@
             width: 100%;
             height: 100%;
             z-index: 9999;
-            background-image: url('../gifs/merry-christmas.gif');
+            background-image: url('../gifs/hot-guy.gif');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             opacity: 1;
-            transition: opacity 1s ease;
+            transition: opacity 2s ease;
         }
 
         .splash-screen.hidden {
@@ -180,6 +180,14 @@
             font-size: 32px;
             font-weight: bold;
             border: 3px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .profile-info h3 {
@@ -297,7 +305,7 @@
 
         <div class="container">
             <div class="welcome-section">
-                <h1 class="welcome-title">Welcome to Our Team Dashboard! 👋</h1>
+                <h1 class="welcome-title">Welcome to Our Dashboard! 👋</h1>
                 <p class="welcome-subtitle">Meet our amazing team members</p>
             </div>
 
@@ -308,8 +316,7 @@
                     <div class="team-card">
                         <div class="profile-section">
                             <div class="profile-img">
-                                 <img src="/pics/download.jpg" alt="Lord Kiann Macaraya">
-                                
+                                <img src="../pics/download.jpg" alt="Lord Kiann Macaraya">
                             </div>
                             <div class="profile-info">
                                 <h3>Lord Kiann Macaraya</h3>
@@ -340,10 +347,10 @@
                     <div class="team-card">
                         <div class="profile-section">
                             <div class="profile-img">
-                                 <img src="/pics/download (1).jpg" alt="Adam Wyiol">
+                                <img src="../pics/download (1).jpg" alt="Adam Wywiol">
                             </div>
                             <div class="profile-info">
-                                <h3>Adam Wyiol</h3>
+                                <h3>Adam Wywiol</h3>
                                 <p class="profile-role">UI/UX Designer</p>
                             </div>
                         </div>
@@ -371,7 +378,7 @@
                     <div class="team-card">
                         <div class="profile-section">
                             <div class="profile-img">
-                                 <img src="/pics/download (2).jpg" alt="Dan Guilliam Montenegro">
+                                <img src="../pics/download (2).jpg" alt="Dan Guilliam Montenegro">
                             </div>
                             <div class="profile-info">
                                 <h3>Dan Guilliam Montenegro</h3>
@@ -381,49 +388,26 @@
                         <div class="info-grid">
                             <div class="info-item">
                                 <div class="info-icon">📧</div>
-                                <span><span class="info-label">Email:</span> mike.brown@example.com</span>
+                                <span><span class="info-label">Email:</span> dangmontenegro@gmail.com</span>
                             </div>
                             <div class="info-item">
                                 <div class="info-icon">📱</div>
-                                <span><span class="info-label">Phone:</span> +1 (555) 345-6789</span>
+                                <span><span class="info-label">Phone:</span> +63 9498103923</span>
                             </div>
                             <div class="info-item">
                                 <div class="info-icon">📍</div>
-                                <span><span class="info-label">Location:</span> Tokyo, Japan</span>
+                                <span><span class="info-label">Location:</span> Tuba, Dalaguete, Cebu</span>
                             </div>
                             <div class="info-item">
                                 <div class="info-icon">🎯</div>
-                                <span><span class="info-label">Projects:</span> 18 Completed</span>
+                                <span><span class="info-label">Projects:</span> 6 Completed</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="stats-section">
-                <h2 class="section-title">Team Statistics</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">73</div>
-                        <div class="stat-label">Total Projects</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">98%</div>
-                        <div class="stat-label">Success Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Team Members</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">5+</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+            
     <!-- Splash Screen Script (must run immediately) -->
     <script>
         // Show splash screen for 0.5 seconds, then show dashboard
@@ -434,7 +418,7 @@
             setTimeout(() => {
                 splashScreen.classList.add('hidden');
                 dashboard.classList.add('visible');
-            }, 0.5); // 0.5 seconds
+            }, 500); // 0.5 seconds
         });
     </script>
 

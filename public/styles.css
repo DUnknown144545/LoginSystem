@@ -486,3 +486,232 @@ input.toggleable:focus + .toggle-btn {
     color: #764ba2;
     text-decoration: underline;
 }
+.login-timer {
+    display: none;
+    padding: 16px;
+    background: #fff3cd;
+    border: 2px solid #333;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.login-timer.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+.login-timer .timer-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.login-timer .timer-text {
+    font-size: 14px;
+    color: #856404;
+    margin-bottom: 4px;
+}
+
+.login-timer .timer-countdown {
+    font-size: 24px;
+    color: #333;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+/* ============================================
+   OTP MODAL STYLES - Add to end of styles.css
+   ============================================ */
+
+.otp-modal-content {
+    max-width: 480px;
+    padding: 32px 24px;
+}
+
+.otp-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.otp-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.otp-modal-content h3 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    color: #2d3748;
+    font-weight: 800;
+}
+
+.otp-subtitle {
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.5;
+}
+
+.otp-subtitle strong {
+    color: #667eea;
+    font-weight: 700;
+}
+
+.otp-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.otp-input {
+    width: 56px;
+    height: 56px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    border: 3px solid #333;
+    border-radius: 8px;
+    background: white;
+    color: #2d3748;
+    transition: all 0.2s ease;
+    font-family: 'Nunito', sans-serif;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    transform: scale(1.05);
+}
+
+.otp-input.filled {
+    background: #f0f4ff;
+    border-color: #667eea;
+}
+
+.otp-input.error {
+    border-color: #ef4444;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.otp-timer {
+    text-align: center;
+    margin: 20px 0;
+    padding: 12px;
+    background: #fff3cd;
+    border: 2px solid #333;
+    border-radius: 4px;
+}
+
+.otp-timer span {
+    font-size: 14px;
+    color: #856404;
+    font-weight: 700;
+}
+
+.otp-timer strong {
+    color: #333;
+    font-size: 16px;
+}
+
+.otp-timer.expired {
+    background: #f8d7da;
+}
+
+.otp-timer.expired span {
+    color: #721c24;
+}
+
+.otp-verify-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 16px;
+    background: #667eea;
+    color: white;
+    border: 3px solid #333;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 4px 4px 0 #333;
+    font-family: 'Nunito', sans-serif;
+}
+
+.otp-verify-btn:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #333;
+}
+
+.otp-verify-btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #333;
+}
+
+.otp-verify-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.otp-resend {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #e2e8f0;
+    font-size: 14px;
+    color: #718096;
+}
+
+.resend-link {
+    margin-left: 8px;
+    font-size: 14px;
+    padding: 0;
+    margin-top: 0;
+}
+
+.resend-cooldown {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+.otp-loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .otp-input-container {
+        gap: 8px;
+    }
+    
+    .otp-input {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+    
+    .otp-modal-content {
+        padding: 24px 16px;
+    }
+}
