@@ -20,7 +20,38 @@ let countdownInterval = null;
 
 export function initRegister() {
   const regBtn = document.getElementById("regBtn");
-  
+  const pass1El = document.getElementById("regPass");
+  const pass2El = document.getElementById("regPass2");
+  const matchText = document.getElementById("passMatchText");
+
+  const updatePassMatch = () => {
+    if (!matchText) return;
+    const p1 = pass1El ? pass1El.value : "";
+    const p2 = pass2El ? pass2El.value : "";
+
+    matchText.classList.remove("ok", "bad");
+
+    if (!p1 && !p2) {
+      matchText.textContent = "";
+      return;
+    }
+    if (!p2) {
+      matchText.textContent = "";
+      return;
+    }
+
+    if (p1 === p2) {
+      matchText.textContent = "Passwords match";
+      matchText.classList.add("ok");
+    } else {
+      matchText.textContent = "Passwords do not match";
+      matchText.classList.add("bad");
+    }
+  };
+
+  if (pass1El) pass1El.addEventListener("input", updatePassMatch);
+  if (pass2El) pass2El.addEventListener("input", updatePassMatch);
+
   regBtn.addEventListener("click", async () => {
     const email = document.getElementById("regEmail").value;
     const pass = document.getElementById("regPass").value;
