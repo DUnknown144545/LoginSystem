@@ -58,6 +58,12 @@
       gap:10px;
     }
 
+    .title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
     .user-email {
       font-size: 14px;
       color: rgba(255,255,255,0.85);
@@ -151,8 +157,8 @@
   <div class="dashboard" id="dashboard">
     <nav class="navbar">
       <div class="logo">
-        <span>🚀</span>
-        <div>
+        <span></span>
+        <div class="title-row">
           <div>Team Dashboard</div>
           <div id="userEmail" class="user-email" style="font-size:13px; font-weight:500; color:rgba(255,255,255,0.85);"></div>
         </div>
@@ -165,7 +171,7 @@
 
     <div class="container">
       <div class="welcome-section">
-        <h1 class="welcome-title">Welcome to Our Dashboard! 👋</h1>
+        <h1 class="welcome-title">Welcome to Our Dashboard!</h1>
         <p class="welcome-subtitle">Meet our amazing team members</p>
       </div>
 
