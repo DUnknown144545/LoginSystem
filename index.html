@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" data-tab="login">Login</button>
+            <button class="tab" data-tab="register">Register</button>
+        </div>
+
+        <div class="form-container">
+            <!-- Login Form -->
+            <div id="loginForm" class="form-section active">
+                <h2>Welcome back</h2>
+                <p class="subtitle">Enter your credentials to access your account</p>
+
+                <div id="loginMessage" class="message"></div>
+                <div id="loginTimer" class="login-timer"></div>
+
+                <div class="input-group">
+                    <label for="loginEmail">Email</label>
+                    <input id="loginEmail" type="email" placeholder="you@example.com">
+                </div>
+
+                <div class="input-group">
+                    <label for="loginPass">Password</label>
+                    <input id="loginPass" type="password" placeholder="Enter your password">
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+
+                <button id="loginBtn">Sign In</button>
+
+                <div class="form-footer">
+                    Don't have an account? <a href="#" class="switch-form" data-target="register">Sign up</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="form-section">
+                <h2>Create account</h2>
+                <p class="subtitle">Sign up to get started with your account</p>
+
+                <div id="registerMessage" class="message"></div>
+
+                <div class="input-group">
+                    <label for="regEmail">Email</label>
+                    <input id="regEmail" type="email" placeholder="you@example.com">
+                </div>
+
+                <div class="input-group">
+                    <label for="regPass">Password</label>
+                    <input id="regPass" class="toggleable" type="password" placeholder="Create a strong password">
+                    <button type="button" class="toggle-btn" data-target="regPass">
+                        <svg class="eye-open" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" style="display: none;" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="inline-strength">
+                    <div class="inline-meter">
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                        <div class="seg"></div>
+                    </div>
+                    <div id="inlineStrengthText" class="inline-strength-text">Strength: —</div>
+                </div>
+
+                <div class="criteria-title">Password requirements</div>
+                <ul class="criteria">
+                    <li id="critLength">At least 8 characters</li>
+                    <li id="critUpper">Uppercase letter (A-Z)</li>
+                    <li id="critLower">Lowercase letter (a-z)</li>
+                    <li id="critNumber">Number (0-9)</li>
+                    <li id="critSpecial">Special character (!@#$...)</li>
+                </ul>
+
+                <div class="input-group">
+                    <label for="regPass2">Confirm Password</label>
+                    <input id="regPass2" class="toggleable" type="password" placeholder="Re-enter your password">
+                    <button type="button" class="toggle-btn" data-target="regPass2">
+                        <svg class="eye-open" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed" style="display: none;" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div id="passMatchText" class="match-text"></div>
+
+                <button id="regBtn">Create Account</button>
+
+                <div class="form-footer">
+                    Already have an account? <a href="#" class="switch-form" data-target="login">Log in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div id="otpModal" class="modal">
+        <div class="modal-content otp-modal-content">
+            <button class="modal-close" id="otpModalClose">&times;</button>
+            
+            <div class="otp-header">
+                <div class="otp-icon">📧</div>
+                <h3>Verify Your Email</h3>
+                <p class="otp-subtitle">We've sent a 6-digit code to <strong id="otpEmailDisplay"></strong></p>
+            </div>
+
+            <div id="otpMessage" class="message"></div>
+
+            <div class="otp-input-container">
+                <input type="text" maxlength="1" class="otp-input" id="otp1" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp2" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp3" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp4" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp5" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp6" autocomplete="off">
+            </div>
+
+            <div class="otp-timer">
+                <span id="otpTimerText">Code expires in: <strong id="otpCountdown">10:00</strong></span>
+            </div>
+
+            <button id="verifyOtpBtn" class="otp-verify-btn">Verify Code</button>
+
+            <div class="otp-resend">
+                <span>Didn't receive the code?</span>
+                <button id="resendOtpBtn" class="link-btn resend-link">Resend Code</button>
+                <span id="resendCooldown" class="resend-cooldown"></span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/main/firebase.js"></script>
+    <script type="module" src="/main/script.js"></script>
+
+</body>
+
+</html>
