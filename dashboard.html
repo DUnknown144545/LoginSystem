@@ -236,7 +236,7 @@
   <!-- Inline module: auth guard, show user info, logout button -->
   <script type="module">
     // Import auth and logout from your firebase module
-    import { auth, logout } from 'main/firebase.js';
+    import { auth, logout } from './main/firebase.js';
     import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
     const logoutBtn = document.getElementById('logoutBtn');

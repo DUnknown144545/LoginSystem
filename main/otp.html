@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify OTP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <div id="otpSection" class="form-section active">
+        <h2>Email verification</h2>
+        <p class="subtitle">Enter the 6-digit code we sent to <span id="otpEmail"></span></p>
+
+        <div id="otpMessage" class="message"></div>
+
+        <div class="input-group">
+          <label for="otpCode">One-Time Password (OTP)</label>
+          <input id="otpCode" type="text" placeholder="Enter 6-digit code" maxlength="6" />
+        </div>
+
+        <button id="verifyOtpBtn">Verify Email</button>
+        <button id="resendOtpBtn" class="link-btn" style="margin-top:12px">Resend code</button>
+
+        <div class="form-footer">
+          <a id="backToLogin" href="/main/index.html">Back to Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/main/firebase.js"></script>
+  <script type="module" src="/main/otp.js"></script>
+</body>
+</html>
