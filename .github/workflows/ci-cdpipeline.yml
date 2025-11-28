@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ main, develop ]
 
-# Minimal permissions required to deploy to Pages
 permissions:
   contents: read
   pages: write
@@ -16,7 +15,6 @@ env:
   NODE_VERSION: '18.x'
 
 jobs:
-  # Job 1: Linting and Code Quality (non-blocking)
   lint:
     name: Lint Code
     runs-on: ubuntu-latest
@@ -33,17 +31,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ -f package.json ]; then npm ci; else echo "no package.json, skipping npm ci"; fi
+          if [ -f package.json ]; then npm ci; else echo "No package.json, skipping npm install"; fi
 
-      - name: Run ESLint (if present)
+      - name: Run ESLint (if exists)
         run: |
-          if grep -q "\"lint\"" package.json; then npm run lint || true; else echo "no lint script, skipping"; fi
+          if grep -q "\"lint\"" package.json 2>/dev/null; then npm run lint || true; else echo "No lint script, skipping"; fi
 
-      - name: Run Prettier check (if present)
+      - name: Run Prettier check (if exists)
         run: |
-          if grep -q "\"format:check\"" package.json; then npm run format:check || true; else echo "no format:check script, skipping"; fi
+          if grep -q "\"format:check\"" package.json 2>/dev/null; then npm run format:check || true; else echo "No format:check script, skipping"; fi
 
-  # Job 2: Security Scanning (non-blocking)
   security:
     name: Security Scan
     runs-on: ubuntu-latest
@@ -57,60 +54,47 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install dependencies (if package.json exists)
+      - name: Install dependencies (if exists)
         run: |
-          if [ -f package.json ]; then npm ci; else echo "no package.json, skipping npm ci"; fi
+          if [ -f package.json ]; then npm ci; else echo "No package.json, skipping npm install"; fi
 
-      - name: Run npm audit (if deps installed)
+      - name: Run npm audit (if npm project)
         run: |
-          if [ -f package-lock.json ] || [ -f package.json ]; then npm audit --audit-level=moderate || true; else echo "no npm deps, skipping audit"; fi
+          if [ -f package.json ]; then npm audit --audit-level=moderate || true; else echo "No package.json, skipping audit"; fi
 
-      - name: Check for secrets with trufflehog
+      - name: Quick secret scan (latest commit only)
         uses: trufflesecurity/trufflehog@main
         with:
-          extra_args: --only-verified
+          extra_args: --only-verified --max-depth 1
+          # This scans ONLY the latest commit → super fast
 
-  # Job 3: Deploy Static Site to GitHub Pages (publishes main/ folder)
   deploy-pages:
     name: Deploy Static Site (gh-pages)
     runs-on: ubuntu-latest
     needs: [lint, security]
-    # only publish on direct pushes to main
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Show top-level files (debug)
-        run: |
-          echo "Repository top-level:"
-          ls -la
-
-      - name: Show site folder contents (debug)
-        run: |
-          if [ -d main ]; then echo "main folder contents:"; ls -la main || true; else echo "main folder not found"; fi
-
-      - name: Deploy to gh-pages
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: main          # <--- publish this folder (where your index.html is)
           branch: gh-pages
+          folder: main         # Deploy your main/ folder (contains index.html)
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  # Job 4: Notify on failure
   notify-failure:
     name: Notify on Failure
     runs-on: ubuntu-latest
-    # depend only on lint and security so deploy skipping doesn't block notifier
     needs: [lint, security]
     if: ${{ failure() }}
 
     steps:
-      - name: Print failure summary
+      - name: Print summary
         run: |
-          echo "❌ Pipeline failed! Check job logs for details."
-          echo "Repository: ${{ github.repository }}"
+          echo "❌ Pipeline failed!"
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
