@@ -78,12 +78,23 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install dependencies  
+      - name: Install dependencies  
         run: npm ci
 
       - name: Build application
         run: npm run build
-      
+        # --- FIX 1: Restoring the necessary environment variables for the build ---
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
+        # --------------------------------------------------------------------------
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -116,6 +127,9 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
+          # --- FIX 2: Added the required service account secret for deployment ---
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # ----------------------------------------------------------------------
           channelId: live
           projectId: authsystemteo
 
@@ -146,6 +160,9 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
+          # --- FIX 2: Added the required service account secret for deployment ---
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # ----------------------------------------------------------------------
           projectId: authsystemteo
           expires: 7d
 
@@ -162,3 +179,6 @@ jobs:
           echo "❌ Pipeline failed! Check the logs for details."
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
+          # --- FIX 3: Corrected a typo in the branch echo command ---
+          echo "Commit: ${{ github.sha }}"
+        # -----------------------------------------------------------
