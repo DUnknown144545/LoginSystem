@@ -43,7 +43,7 @@ export function initLogin() {
           "Welcome back! Taking you to your dashboard...",
           "success"
         );
-        setTimeout(() => (window.location.href = "main/dashboard.html"), 1200);
+        setTimeout(() => (window.location.href = "dashboard.html"), 1200);
       })
       .catch((err) => {
         // Increment failed attempts
