@@ -79,7 +79,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: main         # Deploy your main/ folder (contains index.html)
+          folder: '.'         # <<-- publish repository root (so index.html at root is included)
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
