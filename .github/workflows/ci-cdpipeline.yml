@@ -58,18 +58,30 @@ jobs:
       - run: npm ci
       - name: Build application
         run: npm run build
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./dist
+      - name: Show built files (debug)
+        run: |
+          echo "dist size and top-level files:"
+          du -sh dist || true
+          ls -la dist || true
 
   deploy-pages:
-    name: Deploy to GitHub Pages
+    name: Deploy to GitHub Pages (gh-pages branch)
     runs-on: ubuntu-latest
     needs: [build]
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     steps:
-      - uses: actions/deploy-pages@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          # folder to push (your built static site)
+          folder: ./dist
+          # branch where static site will be deployed
+          branch: gh-pages
+          # token (the action uses the token to push)
+          token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
 
   notify-failure:
     name: Notify on Failure
